@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "**" # Triggers the workflow for any change
+      - "**" # Triggers workflow for any changes
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -22,8 +22,9 @@ jobs:
       - name: 🚀 Checkout Code
         uses: actions/checkout@v2
 
-      - name: 📦 Create .env File
+      - name: 📦 Create `.env` File for Backend
         run: |
+          cd backend
           touch .env
           echo ENVIRONMENT=${{ secrets.ENVIRONMENT }} >> .env
           echo MONGO_URL=${{ secrets.MONGO_URL }} >> .env
@@ -32,12 +33,20 @@ jobs:
           echo REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} >> .env
           cat .env
 
+      - name: 📦 Create `.env` File for Frontend
+        run: |
+          cd frontend
+          touch .env
+          echo REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} >> .env
+          echo NODE_ENV=production >> .env
+          cat .env 
+
       - name: 🔧 Set Up Node.js (Backend)
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: backend/package-lock.json # 🔹 Ensure caching for backend
+          cache-dependency-path: backend/package-lock.json
 
       - name: 📦 Install Backend Dependencies
         run: |
@@ -53,7 +62,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: frontend/package-lock.json # 🔹 Ensure caching for frontend
+          cache-dependency-path: frontend/package-lock.json
 
       - name: 📦 Install Frontend Dependencies & Build
         run: |
@@ -63,7 +72,7 @@ jobs:
           else
             npm install
           fi
-          npm run build     
+          npm run build
 
       - name: 🔄 Deploy to Server & Restart Services
         run: |
