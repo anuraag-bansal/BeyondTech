@@ -62,4 +62,4 @@ jobs:
 
           cd ../frontend
           npm run build
-          pm2 restart all
+          sudo cp -r build/* /var/www/html/
