@@ -35,10 +35,10 @@ jobs:
 
       - name: 📦 Create `.env` File for Frontend
         run: |
-          cd frontend
+          cd ../frontend
           touch .env
           echo REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} >> .env
-          echo NODE_ENV=production >> .env
+          echo ENVIRONMENT=${{ secrets.ENVIRONMENT }} >> .env
           cat .env 
 
       - name: 🔧 Set Up Node.js (Backend)

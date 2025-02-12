@@ -3,7 +3,9 @@ import { getOrders } from "../api";
 import { AuthContext } from "../context/AuthContext";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:5001");
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5001"; // ✅ Use environment variable
+
+const socket = io(SERVER_URL);
 
 const OrdersList = () => {
     const { user } = useContext(AuthContext);

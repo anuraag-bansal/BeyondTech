@@ -27,7 +27,7 @@ app.set("io", io);
     try {
         await mongoLib.connectToMongo(process.env.MONGO_URL);
         // ✅ Apply CORS Middleware
-        app.use(cors({ origin: ["http://localhost:3000", "http://54.245.180.84/3000"], credentials: true }));
+        app.use(cors({ origin: ["http://localhost:3000", "http://54.245.180.84:3000"], credentials: true }));
 
         setupWebSockets(io);
 
@@ -44,8 +44,8 @@ app.set("io", io);
         app.use("/api/auth", authRoutes);
         app.use("/api/orders", orderRoutes);
 
-        const PORT =process.env.PORT || 5001;
-        server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+        const PORT = process.env.PORT || 5001;
+        server.listen(PORT, "0.0.0.0", () => console.log(`🚀 WebSocket running on ${PORT}`));
     } catch (err) {
         console.log(err);
     }
