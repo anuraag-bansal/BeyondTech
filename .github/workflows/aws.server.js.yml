@@ -57,15 +57,9 @@ jobs:
 
       - name: 🔄 Deploy to Server & Restart Services
         run: |
-          cd /var/www/fullstack-app
-          git pull origin main
-          
           cd backend
-          npm install
-          
-          # ✅ Restart all PM2 processes
           pm2 restart all
 
           cd ../frontend
           npm run build
-          sudo cp -r build/* /var/www/html/  # ✅ Deploy frontend to Nginx
+          pm2 restart all
