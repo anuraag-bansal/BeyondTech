@@ -38,7 +38,7 @@ const DeliveryDashboard = () => {
     // ✅ Handle order status update
     const handleUpdate = async (id, status) => {
         try {
-            const res = await updateOrderStatus(id, status, user.token);
+           await updateOrderStatus(id, status, user.token);
 
             setOrders((prevOrders) =>
                 prevOrders.map((o) => (o._id === id ? { ...o, status: status } : o))
