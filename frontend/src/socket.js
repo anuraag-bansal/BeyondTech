@@ -1,9 +1,12 @@
+require("dotenv").config({path:"../.env"});
 import { io } from "socket.io-client";
 
-// ✅ Connect to the backend WebSocket server
-const socket = io("http://localhost:5001", {
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5001"; // ✅ Use environment variable
+
+const socket = io(SERVER_URL, {
+    path: "/api/socket.io/",  // ✅ Important for Nginx proxying WebSockets
     transports: ["websocket", "polling"],
-    withCredentials: true, // Allows CORS with credentials
+    withCredentials: true,
 });
 
 export default socket;
