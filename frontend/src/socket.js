@@ -1,4 +1,3 @@
-require("dotenv").config({path:"../.env"});
 import { io } from "socket.io-client";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5001"; // ✅ Use environment variable
