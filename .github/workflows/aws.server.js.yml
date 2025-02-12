@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: aws.server.js CI
 
 on:
@@ -8,7 +5,7 @@ on:
     branches: [main]
     paths:
       - "**"
-#here we can configure folder to trigger all repos restart
+# Here we configure it to trigger restart on all repo updates
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -21,21 +18,57 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: 🚀 Checkout Code
+        uses: actions/checkout@v2
+
+      - name: 🔧 Set Up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: |
+
+      - name: 📦 Create `.env` File
+        run: |
           touch .env
           echo ENVIRONMENT=${{ secrets.ENVIRONMENT }} >> .env
           echo MONGO_URL=${{ secrets.MONGO_URL }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo PORT=${{ secrets.PORT }} >> .env
           cat .env
-      - run: npm i
-      - run: pm2 restart all
+
+      - name: 📦 Install Backend Dependencies
+        run: |
+          cd backend
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: 📦 Install Frontend Dependencies & Build
+        run: |
+          cd frontend
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+          npm run build
+
+      - name: 🔄 Deploy to Server & Restart Services
+        run: |
+          cd /var/www/fullstack-app
+          git pull origin main
+          
+          cd backend
+          npm install
+          
+          # ✅ Restart all PM2 processes
+          pm2 restart all
+
+          cd ../frontend
+          npm run build
+          sudo cp -r build/* /var/www/html/  # ✅ Deploy frontend to Nginx
+
