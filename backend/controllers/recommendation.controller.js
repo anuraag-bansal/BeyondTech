@@ -1,10 +1,9 @@
-require("dotenv").config();
+require("dotenv").config({path: "../.env"});
 const {GoogleGenerativeAI} = require("@google/generative-ai");
 const orderModel = require("../models/order.model");
 const mongoLib = require("../lib/mongo.lib");
-const GEMINI_API_KEY = "AIzaSyAYS1xBUcTsOUihT8BSGkZFcSaWKuB88wI"
 
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({model: "gemini-2.0-flash"});
 
 async function getRecommendations(req, res) {
