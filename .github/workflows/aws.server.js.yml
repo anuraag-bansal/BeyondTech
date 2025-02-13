@@ -31,6 +31,7 @@ jobs:
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo PORT=${{ secrets.PORT }} >> .env
           echo REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} >> .env
+          echo GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} >> .env
           cat .env
 
       - name: 📦 Create `.env` File for Frontend
