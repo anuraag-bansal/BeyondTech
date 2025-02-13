@@ -19,8 +19,8 @@ const DeliveryDashboard = () => {
     }, [user.token]);
 
     useEffect(() => {
-        fetchOrders().then(r => console.log(r));
-        userDetails().then(r => console.log(r));
+        fetchOrders()
+        userDetails()
 
         const handleOrderUpdate = (updatedOrder) => {
             console.log("📦 Order updated:", updatedOrder); // Debugging
@@ -34,7 +34,7 @@ const DeliveryDashboard = () => {
         return () => {
             socket.off("orderUpdated", handleOrderUpdate);
         };
-    }, [fetchOrders,setOrders]);
+    }, [fetchOrders]);
 
     const handleAcceptOrder = async (id) => {
         try {
@@ -81,7 +81,7 @@ const DeliveryDashboard = () => {
     const userDetails = async () => {
         try {
             const res = await getUser(user.token);
-            console.log(res.data);
+           // console.log(res.data);
             setUserDetail(res.data);
         } catch (err) {
             console.error("❌ Error fetching user:", err);

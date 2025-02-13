@@ -17,7 +17,7 @@ const OrdersList = () => {
             }
         };
 
-        fetchOrders().then(r => console.log(r));
+        fetchOrders()
 
         socket.on("orderUpdated", (updatedOrder) => {
             console.log("🔄 Order Update Received via WebSocket:", updatedOrder); // ✅ Debugging
