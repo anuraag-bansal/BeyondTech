@@ -44,7 +44,7 @@ const DeliveryDashboard = () => {
         return () => {
             socket.off("orderUpdated", handleOrderUpdate);
         };
-    }, [fetchOrders,userDetails()]);
+    }, [fetchOrders,userDetails]);
 
     const handleAcceptOrder = async (id) => {
         try {
