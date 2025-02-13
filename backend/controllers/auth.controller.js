@@ -46,4 +46,17 @@ async function loginUser(req, res) {
     res.json({token: token, user: user});
 }
 
-module.exports = {registerUser, loginUser};
+async function getUser(req, res) {
+    try {
+        const user = await mongoLib.findOne(userModel, {_id: req.user.id});
+        if (!user) {
+            return res.status(404).json({message: "User not found"});
+        }
+        return res.json(user);
+    } catch (err) {
+        console.error("❌ Server Error:", err);
+        return res.status(500).json({message: "❌ Internal Server Error"});
+    }
+}
+
+module.exports = {registerUser, loginUser, getUser};

@@ -28,7 +28,6 @@ app.set("io", io);
         await mongoLib.connectToMongo(process.env.MONGO_URL);
         app.use(cors({ origin: "*", credentials: true }));
 
-        setupWebSockets(io);
 
         app.use(express.json());
 
@@ -39,6 +38,7 @@ app.set("io", io);
             req.io = io;
             next();
         });
+        setupWebSockets(io);
 
         app.use("/api/auth", authRoutes);
         app.use("/api/orders", orderRoutes);

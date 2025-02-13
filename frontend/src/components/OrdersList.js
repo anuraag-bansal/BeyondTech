@@ -1,17 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { getOrders } from "../api";
 import { AuthContext } from "../context/AuthContext";
-import io from "socket.io-client";
-
-const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5001"; // ✅ Use environment variable
-
-const socket = io(SERVER_URL);
+import socket from "../socket";
 
 const OrdersList = () => {
     const { user } = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const res = await getOrders(user.token);
@@ -21,12 +17,22 @@ const OrdersList = () => {
             }
         };
 
-        fetchOrders();
+        fetchOrders().then(r => console.log(r));
 
-        socket.on("orderUpdated", (order) => {
-            setOrders((prevOrders) =>
-                prevOrders.map((o) => (o._id === order._id ? order : o))
-            );
+        socket.on("orderUpdated", (updatedOrder) => {
+            console.log("🔄 Order Update Received via WebSocket:", updatedOrder); // ✅ Debugging
+
+            setOrders((prevOrders) => {
+                const orderExists = prevOrders.some((o) => o._id === updatedOrder._id);
+
+                if (orderExists) {
+                    // ✅ Update existing order
+                    return prevOrders.map((o) => (o._id === updatedOrder._id ? updatedOrder : o));
+                } else {
+                    // ✅ Add new order to the list
+                    return [...prevOrders, updatedOrder];
+                }
+            });
         });
 
         return () => socket.off("orderUpdated");

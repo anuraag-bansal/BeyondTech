@@ -154,6 +154,17 @@ async function findById(model, id) {
     }
 }
 
+async function insertOne(model, document) {
+    try {
+        if (model === null || document === null) {
+            throw new Error("model and document are required")
+        }
+        return await model.create(document)
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     connectToMongo,
     findOneAndUpdate,
@@ -161,5 +172,6 @@ module.exports = {
     findByQueryWithSkipLimit,
     findByQuery,
     findOneByQueryWithSelectWithSort: findOneByQueryWithSelectWithSort,
+    insertOne,
     findById
 }
