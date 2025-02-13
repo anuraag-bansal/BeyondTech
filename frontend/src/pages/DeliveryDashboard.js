@@ -18,6 +18,16 @@ const DeliveryDashboard = () => {
         }
     }, [user.token]);
 
+
+    const userDetails = useCallback(async () => {
+        try {
+            const res = await getUser(user.token);
+            setUserDetail(res.data);
+        } catch (err) {
+            console.error("❌ Error fetching user:", err);
+        }
+    }, [user.token]);
+
     useEffect(() => {
         fetchOrders()
         userDetails()
@@ -34,7 +44,7 @@ const DeliveryDashboard = () => {
         return () => {
             socket.off("orderUpdated", handleOrderUpdate);
         };
-    }, [fetchOrders,userDetails]);
+    }, [fetchOrders,userDetails()]);
 
     const handleAcceptOrder = async (id) => {
         try {
@@ -78,15 +88,6 @@ const DeliveryDashboard = () => {
         }
     };
 
-    const userDetails = async () => {
-        try {
-            const res = await getUser(user.token);
-           // console.log(res.data);
-            setUserDetail(res.data);
-        } catch (err) {
-            console.error("❌ Error fetching user:", err);
-        }
-    }
 
     return (
         <div>
