@@ -1,4 +1,4 @@
-require('dotenv').config({path:"./.env"});
+require('dotenv').config({path: "./.env"});
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
@@ -9,7 +9,7 @@ const _ = require('lodash');
  */
 async function connectToMongo(url) {
     try {
-        if(_.isEmpty(url)) {
+        if (_.isEmpty(url)) {
             throw new Error("MONGO_URL is required")
         }
         await mongoose.connect(url)
@@ -141,19 +141,30 @@ async function findByQuery(model, query, timeout = 10000) {
     }
 }
 
+/**
+ * Finds a document by its ID.
+ * @param {Object} model
+ * @param {string} id
+ * @returns {Promise<*>}
+ * @throws {Error} If model or id is not provided.
+ */
 async function findById(model, id) {
     try {
         if (model === null || id === null) {
             throw new Error("model and id are required")
         }
-        return await
-            model.findById(id)
-    }
-    catch (error) {
+        return await model.findById(id)
+    } catch (error) {
         throw error
     }
 }
 
+/**
+ * Inserts a document into the database.
+ * @param {Object} model
+ * @param {Object} document
+ * @returns {Promise<*>}
+ */
 async function insertOne(model, document) {
     try {
         if (model === null || document === null) {

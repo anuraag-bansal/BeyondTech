@@ -1,3 +1,6 @@
+/** Used to set up the websockets server
+ * @param io
+ */
 const setupWebSockets = (io) => {
     io.on("connection", (socket) => {
         console.log("📡 New client connected:", socket.id);

@@ -1,20 +1,35 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { Container, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    return (
-        <div className="home-container">
-            <h1>🚀 Welcome to Quick Commerce</h1>
-            <p>Track your orders and manage deliveries in real-time.</p>
+    const navigate = useNavigate();
 
-            <div className="buttons">
-                <Link to="/register">
-                    <button>Register</button>
-                </Link>
-                <Link to="/login">
-                    <button>Login</button>
-                </Link>
-            </div>
-        </div>
+    return (
+        <Container style={{ textAlign: "center", paddingTop: "50px" }}>
+            <Typography variant="h4" gutterBottom>
+                Welcome to Our E-Commerce Platform
+            </Typography>
+            <Typography variant="subtitle1">
+                Shop easily & track your deliveries in real-time!
+            </Typography>
+            <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "10px" }}
+                onClick={() => navigate("/login")}
+            >
+                Login
+            </Button>
+            <Button
+                variant="outlined"
+                color="secondary"
+                style={{ margin: "10px" }}
+                onClick={() => navigate("/register")}
+            >
+                Register
+            </Button>
+        </Container>
     );
 };
 

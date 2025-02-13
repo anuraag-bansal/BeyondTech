@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { registerUser } from "../api";
 import { useNavigate } from "react-router-dom";
+import { Container, TextField, Button, Typography, Paper, MenuItem } from "@mui/material";
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -15,24 +16,60 @@ const Register = () => {
             alert("Registration successful! Please login.");
             navigate("/login");
         } catch (err) {
-            alert("Registration failed: " + err.response.data.message);
+            alert("Registration failed: " + (err.response?.data?.message || "Something went wrong"));
         }
     };
 
     return (
-        <div>
-            <h2>Register</h2>
-            <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-                <option value="customer">Customer</option>
-                <option value="delivery">Delivery Partner</option>
-            </select>
-
-            <button onClick={handleRegister}>Register</button>
-        </div>
+        <Container
+            component={Paper}
+            elevation={3}
+            style={{ padding: "30px", maxWidth: "400px", marginTop: "50px", textAlign: "center" }}
+        >
+            <Typography variant="h5" gutterBottom>
+                Register
+            </Typography>
+            <TextField
+                label="Full Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+                label="Email"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+                label="Password"
+                variant="outlined"
+                type="password"
+                fullWidth
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+            <TextField
+                select
+                label="Role"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+            >
+                <MenuItem value="customer">Customer</MenuItem>
+                <MenuItem value="delivery">Delivery Partner</MenuItem>
+            </TextField>
+            <Button variant="contained" color="primary" fullWidth onClick={handleRegister} style={{ marginTop: "20px" }}>
+                Register
+            </Button>
+        </Container>
     );
 };
 
