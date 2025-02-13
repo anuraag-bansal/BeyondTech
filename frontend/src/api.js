@@ -13,3 +13,4 @@ export const placeOrder = (data, token) => API.post("/orders", data, { headers: 
 export const updateOrderStatus = (orderId, status, token) => API.put(`/orders/${orderId}/status`, { status }, { headers: { Authorization: `Bearer ${token}` } });
 export const acceptOrder = (orderId, token) => API.put(`/orders/accept/${orderId}`, {}, { headers: { Authorization: `Bearer ${token}` } });
 export const getUser = (token) => API.get("/auth/user", { headers: { Authorization: `Bearer ${token}` } });
+export const getRecommendations = (token) => API.get("/recommendations", { headers: { Authorization: `Bearer ${token}` } });

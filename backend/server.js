@@ -7,6 +7,7 @@ const cors = require("cors");
 const socketIo = require("socket.io");
 const authRoutes = require("./routes/auth.routes");
 const orderRoutes = require("./routes/order.routes");
+const recommendationRoutes = require("./routes/recommendation.routes");
 const { setupWebSockets } = require("./websocket");
 
 const app = express();
@@ -42,6 +43,7 @@ app.set("io", io);
 
         app.use("/api/auth", authRoutes);
         app.use("/api/orders", orderRoutes);
+        app.use("/api/recommendations",recommendationRoutes );
 
         const PORT = process.env.PORT || 5001;
         server.listen(PORT, "0.0.0.0", () => console.log(`🚀 WebSocket running on ${PORT}`));

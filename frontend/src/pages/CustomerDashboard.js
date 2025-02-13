@@ -1,6 +1,7 @@
 import React from "react";
 import OrderForm from "../components/OrderForm";
 import OrdersList from "../components/OrdersList";
+import Recommendations from "../components/Recommendations";
 import { Container, Typography, Paper } from "@mui/material";
 
 const CustomerDashboard = () => {
@@ -12,6 +13,7 @@ const CustomerDashboard = () => {
                 </Typography>
                 <OrderForm />
                 <OrdersList />
+                <Recommendations />
             </Paper>
         </Container>
     );
