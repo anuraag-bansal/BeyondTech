@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const url = process.env.REACT_APP_SERVER_URL || "http://localhost:5001"; // ✅ Use environment variable
+
 const API = axios.create({
-    baseURL: "http://localhost:5001/api",
+    baseURL: `${url}/api`,
 });
 
 export const loginUser = (data) => API.post("/auth/login", data);
