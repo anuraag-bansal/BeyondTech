@@ -2,7 +2,8 @@ import { useEffect, useState, useContext, useCallback } from "react";
 import { getOrders, acceptOrder, updateOrderStatus,getUser } from "../api";
 import { AuthContext } from "../context/AuthContext";
 import socket from "../socket";
-import { Container, Typography, Button, Card, CardContent, Grid } from "@mui/material";
+import { Container, Typography, Button, Card, CardContent, Grid2 } from "@mui/material";
+
 
 const DeliveryDashboard = () => {
     const { user } = useContext(AuthContext);
@@ -97,9 +98,9 @@ const DeliveryDashboard = () => {
             </Typography>
 
             {orders.length > 0 ? (
-                <Grid container spacing={3}>
+                <Grid2 container spacing={3}>
                     {orders.map((order) => (
-                        <Grid item xs={12} sm={6} md={4} key={order._id}>
+                        <Grid2 xs={12} sm={6} md={4} key={order._id}>
                             <Card elevation={3}>
                                 <CardContent>
                                     <Typography variant="h6"><strong>{order.product}</strong></Typography>
@@ -142,13 +143,14 @@ const DeliveryDashboard = () => {
                                     )}
                                 </CardContent>
                             </Card>
-                        </Grid>
+                        </Grid2>
                     ))}
-                </Grid>
+                </Grid2>
             ) : (
                 <Typography>No available orders.</Typography>
             )}
         </Container>
     );
 };
+
 export default DeliveryDashboard;
