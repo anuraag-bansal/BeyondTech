@@ -2,6 +2,7 @@ import { useEffect, useState, useContext, useCallback } from "react";
 import { getOrders, acceptOrder, updateOrderStatus,getUser } from "../api";
 import { AuthContext } from "../context/AuthContext";
 import socket from "../socket";
+import { Container, Typography, Button, Card, CardContent, Grid } from "@mui/material";
 
 const DeliveryDashboard = () => {
     const { user } = useContext(AuthContext);
@@ -90,31 +91,64 @@ const DeliveryDashboard = () => {
 
 
     return (
-        <div>
-            <h2>🚚 Delivery Partner Dashboard</h2>
-            {orders.length > 0 ? (
-                <ul>
-                    {orders.map((order) => (
-                        <li key={order._id} style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
-                            <strong>{order.product}</strong> - <span>{order.status}</span>
-                            {order.status === "Pending" && (
-                                <button onClick={() => handleAcceptOrder(order._id)}>Accept Order</button>
-                            )}
+        <Container>
+            <Typography variant="h4" gutterBottom>
+                🚚 Delivery Partner Dashboard
+            </Typography>
 
-                            {order.status === "Accepted" && order.deliveryPartnerId === userDetail._id && (
-                                <button onClick={() => handleUpdateStatus(order._id, "Out for Delivery")}>Out for Delivery</button>
-                            )}
-                            {order.status === "Out for Delivery" && order.deliveryPartnerId === userDetail._id && (
-                                <button onClick={() => handleUpdateStatus(order._id, "Delivered")}>Mark as Delivered</button>
-                            )}
-                        </li>
+            {orders.length > 0 ? (
+                <Grid container spacing={3}>
+                    {orders.map((order) => (
+                        <Grid item xs={12} sm={6} md={4} key={order._id}>
+                            <Card elevation={3}>
+                                <CardContent>
+                                    <Typography variant="h6"><strong>{order.product}</strong></Typography>
+                                    <Typography variant="subtitle1" color="textSecondary">Status: {order.status}</Typography>
+
+                                    {order.status === "Pending" && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            fullWidth
+                                            onClick={() => handleAcceptOrder(order._id)}
+                                            style={{ marginTop: "10px" }}
+                                        >
+                                            Accept Order
+                                        </Button>
+                                    )}
+
+                                    {order.status === "Accepted" && order.deliveryPartnerId === userDetail._id && (
+                                        <Button
+                                            variant="contained"
+                                            color="warning"
+                                            fullWidth
+                                            onClick={() => handleUpdateStatus(order._id, "Out for Delivery")}
+                                            style={{ marginTop: "10px" }}
+                                        >
+                                            Out for Delivery
+                                        </Button>
+                                    )}
+
+                                    {order.status === "Out for Delivery" && order.deliveryPartnerId === userDetail._id && (
+                                        <Button
+                                            variant="contained"
+                                            color="success"
+                                            fullWidth
+                                            onClick={() => handleUpdateStatus(order._id, "Delivered")}
+                                            style={{ marginTop: "10px" }}
+                                        >
+                                            Mark as Delivered
+                                        </Button>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     ))}
-                </ul>
+                </Grid>
             ) : (
-                <p>No available orders.</p>
+                <Typography>No available orders.</Typography>
             )}
-        </div>
+        </Container>
     );
 };
-
 export default DeliveryDashboard;
