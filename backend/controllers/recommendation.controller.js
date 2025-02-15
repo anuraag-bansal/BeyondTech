@@ -1,4 +1,5 @@
 require("dotenv").config({path: "../.env"});
+const _ = require("lodash");
 const {GoogleGenerativeAI} = require("@google/generative-ai");
 const orderModel = require("../models/order.model");
 const mongoLib = require("../lib/mongo.lib");
@@ -9,12 +10,11 @@ const model = genAI.getGenerativeModel({model: "gemini-2.0-flash"});
 async function getRecommendations(req, res) {
     try {
         const customerId = req.user.id;
-        console.log("customerId", customerId);
 
         // ✅ Fetch past orders for the customer
-        const pastOrders = await mongoLib.findByQueryWithSkipLimit(orderModel, {customerId: customerId}, 0, 5);
+        const pastOrders = await mongoLib.findByQuery(orderModel, {customerId: customerId});
 
-        if (!pastOrders) {
+        if (_.isEmpty(pastOrders)) {
             return res.json({recommendations: [], message: "No order history found."});
         }
 
@@ -30,7 +30,6 @@ async function getRecommendations(req, res) {
         `;
 
         const result = await model.generateContent(prompt);
-        console.log("result", result.response.text());
         res.json({recommendations: result.response.text()});
     } catch (error) {
         console.error("❌ Error generating AI recommendations:", error);
