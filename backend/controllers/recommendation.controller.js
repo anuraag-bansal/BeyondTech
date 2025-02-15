@@ -14,7 +14,7 @@ async function getRecommendations(req, res) {
         // ✅ Fetch past orders for the customer
         const pastOrders = await mongoLib.findByQueryWithSkipLimit(orderModel, {customerId: customerId}, 0, 5);
 
-        if (!pastOrders.length) {
+        if (!pastOrders) {
             return res.json({recommendations: [], message: "No order history found."});
         }
 

@@ -74,7 +74,7 @@ async function loginUser(req, res) {
  * Retrieves a user's information.
  * @param {Object} req - Express request object.
  * @param {Object} req.user - User object from JWT.
- * @param {Object} req.user.id - User's ID.
+ * @param {string} req.user.id - User's ID.
  * @param {Object} res - Express response object.
  * @returns {Promise<Object>} JSON response with user details.
  */
