@@ -175,5 +175,3 @@ For delivery partner login:
 Email:kunal@gmail.com
 Password:kunal
 ```
-
-```angular2html
