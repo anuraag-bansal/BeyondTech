@@ -161,8 +161,6 @@ This API is used to accept an order. This API is only accessible to delivery par
 This API is used to get product recommendations based on the user's past orders. The request should contain the JWT token in the Authorization header.
 
 
-### This project is also hosted on AWS.You can access it by opening 54.245.180.84
-
 #### Test Credentials:
 ```angular2html
 For customer login:
