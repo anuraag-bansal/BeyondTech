@@ -16,15 +16,14 @@ const mongoLib = require("../lib/mongo.lib");
  */
 async function placeOrder(req, res) {
     try {
-        const {product, quantity, location} = req.body;
+        const {product, quantity = 1, location} = req.body;
 
-        if(_.isEmpty(product) || _.isEmpty(quantity) || _.isEmpty(location)) {
+        if (_.isEmpty(product) || _.isEmpty(quantity) || _.isEmpty(location)) {
             return res.status(400).json({message: "All fields are required"});
         }
 
         const order = await mongoLib.insertOne(orderModel, {
-            customerId: req.user.id,
-            product, quantity, location,
+            customerId: req.user.id, product, quantity, location,
         })
 
         req.io.emit("orderUpdated", order);
@@ -47,7 +46,7 @@ async function updateOrderStatus(req, res) {
     try {
         const {status} = req.body;
 
-        if(_.isEmpty(status)) {
+        if (_.isEmpty(status)) {
             return res.status(400).json({message: "Status is required"});
         }
 
@@ -75,7 +74,7 @@ async function updateOrderStatus(req, res) {
  */
 async function getPendingOrders(req, res) {
     try {
-        if(_.isEmpty(req.user.id)) {
+        if (_.isEmpty(req.user.id)) {
             return res.status(400).json({message: "User ID is required"});
         }
 
@@ -102,29 +101,26 @@ async function getPendingOrders(req, res) {
 async function getOrders(req, res) {
     try {
 
-        if(_.isEmpty(req.user.role) || _.isEmpty(req.user.id)) {
+        if (_.isEmpty(req.user.role) || _.isEmpty(req.user.id)) {
             return res.status(400).json({message: "User role and ID are required"});
         }
         let orders = [];
 
         if (req.user.role === "customer") {
             // ✅ Customers see only their own orders
-            orders = await mongoLib.findByQuery(orderModel, { customerId: req.user.id });
+            orders = await mongoLib.findByQuery(orderModel, {customerId: req.user.id});
         } else if (req.user.role === "delivery") {
             // ✅ Delivery partners see:
             // - Unassigned "Pending" orders
             // - Orders they have accepted
             orders = await mongoLib.findByQuery(orderModel, {
-                $or: [
-                    { status: "Pending", deliveryPartnerId: null },
-                    { deliveryPartnerId: req.user.id }
-                ]
+                $or: [{status: "Pending", deliveryPartnerId: null}, {deliveryPartnerId: req.user.id}]
             });
         }
 
         res.json(orders);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 }
 
@@ -139,7 +135,7 @@ async function getOrders(req, res) {
  */
 async function acceptOrder(req, res) {
     try {
-        if(_.isEmpty(req.user.id) || _.isEmpty(req.params.id)) {
+        if (_.isEmpty(req.user.id) || _.isEmpty(req.params.id)) {
             return res.status(400).json({message: "User ID and Order ID are required"});
         }
         let order = await mongoLib.findById(orderModel, req.params.id);
@@ -147,8 +143,7 @@ async function acceptOrder(req, res) {
         if (!order) return res.status(404).json({message: "Order not found"});
 
         order = await mongoLib.findOneAndUpdate(orderModel, {_id: req.params.id}, {
-            deliveryPartnerId: req.user.id,
-            status: "Accepted"
+            deliveryPartnerId: req.user.id, status: "Accepted"
         }, {new: true});
 
         const io = req.app.get("io"); // ✅ Get WebSocket instance from Express
@@ -169,7 +164,7 @@ async function acceptOrder(req, res) {
  */
 async function getPastOrders(req, res) {
     try {
-        if(_.isEmpty(req.user.id)) {
+        if (_.isEmpty(req.user.id)) {
             return res.status(400).json({message: "User ID is required"});
         }
         const orders = await mongoLib.findByQuery(orderModel, {customerId: req.user.id, status: {$ne: "Pending"}});
